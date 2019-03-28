@@ -55,6 +55,27 @@ func pow(x, n, lim float64) float64 {
     return lim
 }
 
+type Vertex struct {
+    X int
+    Y int
+}
+
+type Vertex2 struct {
+    Lat, Long float64
+}
+
+func compute(fn func(float64, float64) float64) float64 {
+    return fn(3, 4)
+}
+
+func adder() func(int) int {
+    sum := 0
+    return func(x int) int {
+        sum += x
+        return sum
+    }
+}
+
 func main() {
     defer fmt.Println("defer")
     defer fmt.Println("will be called first")
@@ -105,4 +126,86 @@ func main() {
     default:
         fmt.Println("Good evening.")
     }
+
+    i := 42
+    p := &i         // point to i
+    fmt.Println(*p) // read i through the pointer
+    *p = 21         // set i through the pointer
+    fmt.Println(i)  // see the new value of i
+
+    v := Vertex{1, 2}
+    v2 := Vertex{X: 1} 
+    v.X = 4
+    v2.X = 4
+    fmt.Println(v.X)
+
+    primes := [6]int{2, 3, 5, 7, 11, 13}
+    fmt.Println(primes[0])
+    var s []int = primes[1:4]
+    fmt.Println(s)
+
+    primes[1] = 1
+    fmt.Println(s)
+
+    r := []bool{true, false, true, true, false, true}
+    fmt.Println(r)
+
+    r = r[:3]
+    fmt.Println(r)
+
+    b := make([]int, 0, 5)
+    fmt.Println(b)
+
+    c := b[:2]
+    fmt.Println(c)
+
+    board := [][]string{
+        []string{"_", "_", "_"},
+        []string{"_", "_", "_"},
+        []string{"_", "_", "_"},
+    }
+
+    board[0][0] = "X"
+
+    var s2 []int
+    s2 = append(s, 2, 3, 4)
+    fmt.Println(s2)
+
+    for v := range primes {
+        fmt.Printf("%d\n", v)
+    }
+
+    var m map[string]Vertex2
+    m = make(map[string]Vertex2)
+    m["Bell Labs"] = Vertex2{
+        40.68433, -74.39967,
+    }
+    fmt.Println(m)
+
+    var m2 = map[string]Vertex2{
+        "Bell Labs": Vertex2{
+            40.68433, -74.39967,
+        },
+        "Google": Vertex2{
+            37.42202, -122.08408,
+        },
+    }
+    fmt.Println(m2)
+
+    m3 := make(map[string]int)
+
+    m3["foo"] = 1
+    delete(m3, "foo")
+    val, ok := m3["foo"]
+    fmt.Println("The value:", val, "Present?", ok)
+
+    hypot := func(x, y float64) float64 {
+        return math.Sqrt(x*x + y*y)
+    }
+    fmt.Println(compute(hypot))
+
+    adderx := adder()
+    adderx2 := adder()
+    fmt.Println(adderx(3))
+    fmt.Println(adderx2(15))
 }
