@@ -6,6 +6,8 @@ import (
     "math"
     "runtime"
     "time"
+    "io"
+    "strings"
 )
 
 func add(x, y int) int {
@@ -75,6 +77,16 @@ func adder() func(int) int {
         return sum
     }
 }
+
+func (v *Vertex) Abs() float64 {
+    return math.Sqrt(float64(v.X*v.X + v.Y*v.Y))
+}
+
+type Abser interface {
+    Abs() float64
+}
+
+
 
 func main() {
     defer fmt.Println("defer")
@@ -208,4 +220,67 @@ func main() {
     adderx2 := adder()
     fmt.Println(adderx(3))
     fmt.Println(adderx2(15))
+
+    vobj := Vertex{1, 2}
+    fmt.Println(vobj.Abs())
+
+    var ab Abser
+    vInter := Vertex{3, 4}
+    ab = &vInter
+    fmt.Println(ab.Abs())
+
+    vInter2, ok := ab.(*Vertex)
+    fmt.Println(ok)
+    fmt.Println(vInter2)
+
+    switch ab.(type) {
+    case *Vertex:
+        fmt.Println("Vertex")
+    default:
+        // no match; here v has the same type as i
+    }
+
+    person := Person{"foobar", 18}
+    fmt.Println(person)
+
+    if err := run(); err != nil {
+        fmt.Println(err)
+    }
+
+    rstr := strings.NewReader("Hello, Reader!")
+    buffer := make([]byte, 8)
+    for {
+        nbytes, err := rstr.Read(buffer)
+        fmt.Printf("n = %v err = %v b = %v\n", nbytes, err, buffer)
+        fmt.Printf("b[:nbytes] = %q\n", buffer[:nbytes])
+        if err == io.EOF {
+            break
+        }
+    }
+}
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+func (p Person) String() string {
+    return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
+}
+
+type MyError struct {
+    When time.Time
+    What string
+}
+
+func (e *MyError) Error() string {
+    return fmt.Sprintf("at %v, %s",
+        e.When, e.What)
+}
+
+func run() error {
+    return &MyError{
+        time.Now(),
+        "it didn't work",
+    }
 }
