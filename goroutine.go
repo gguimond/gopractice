@@ -44,6 +44,38 @@ func fibonacci2(c, quit chan int) {
     }
 }
 
+type Mystruct struct {
+        c chan func(i int)
+        i int
+}
+
+func (m *Mystruct) Multiply() {
+    m.c <- func(i int) {
+        m.i = m.i * i;
+        fmt.Printf("multiply : %d", m.i)
+        if(m.i >= 1024){
+            fmt.Println("close")
+            close(m.c)
+        }
+    }
+}
+
+func (m *Mystruct) loop () {
+    /*for{
+        select{
+            case op := <- m.c:
+                op(2)
+            case <- m.quit:
+                fmt.Println("quit")
+                close(m.c)
+                close(m.quit)
+        }
+    }*/
+    for op := range m.c {
+        op(2)
+    }
+}
+
 func main() {
     go say("world")
     say("hello")
@@ -72,7 +104,7 @@ func main() {
     }()
     fibonacci2(c3, quit)
 
-    tick := time.Tick(100 * time.Millisecond)
+    /*tick := time.Tick(100 * time.Millisecond)
     boom := time.After(500 * time.Millisecond)
     for {
         select {
@@ -85,7 +117,19 @@ func main() {
             fmt.Println("    .")
             time.Sleep(50 * time.Millisecond)
         }
+    }*/
+
+    cFunc := make(chan func(i int))
+    //cQuit := make(chan bool)
+    mystruct := Mystruct{cFunc, 1}
+
+    for z:=0; z < 10; z++{
+        go mystruct.Multiply()
     }
 
+    
+    mystruct.loop()
+
+    
     
 }
