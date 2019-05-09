@@ -9,6 +9,8 @@ import (
 	"sync"
 	"time"
     "strconv"
+    "log"
+    "os"
 
 	"github.com/gguimond/gopractice/mylib"
 )
@@ -330,6 +332,48 @@ func main() {
     fmt.Println(KB)
     fmt.Println(MB)
     fmt.Println(1<<1)
+
+    _ , ok17 := ab.(Abser)
+    if ok17 {
+        fmt.Println("is Abser")
+    } else {
+        fmt.Println("is not Abser")
+    }
+
+    job := Job{"print", log.New(os.Stderr, "Job: ", log.Ldate)}
+    job.Println("starting now...")
+
+    defer func() {
+        if e := recover(); e != nil {
+            _ = e.(OurError) // Will re-panic if not our error.
+            fmt.Println("recover")
+        }
+    }()
+    errorPanic()
+
+}
+
+type Job struct {
+    Command string
+    *log.Logger
+}
+
+func (job *Job) Printf(format string, args ...interface{}) {
+    job.Logger.Printf("%q: %s", job.Command, fmt.Sprintf(format, args...))
+}
+
+type Reader interface {
+    Read(p []byte) (n int, err error)
+}
+
+type Writer interface {
+    Write(p []byte) (n int, err error)
+}
+
+// ReadWriter is the interface that combines the Reader and Writer interfaces.
+type ReadWriter interface {
+    Reader
+    Writer
 }
 
 func init(){
@@ -386,4 +430,13 @@ func run() error {
 		time.Now(),
 		"it didn't work",
 	}
+}
+
+type OurError string
+func (e OurError) Error() string {
+    return string(e)
+}
+
+func errorPanic() {
+    panic(OurError("panic"))
 }
