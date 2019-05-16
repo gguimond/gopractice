@@ -1,0 +1,6 @@
+goos: windows
+goarch: amd64
+pkg: github.com/gguimond/gopractice/demo
+BenchmarkHi-8   	 1000000	      1390 ns/op	    1152 B/op	      13 allocs/op
+PASS
+ok  	github.com/gguimond/gopractice/demo	1.593s

@@ -1,0 +1,8 @@
+mode: set
+github.com/gguimond/gopractice/demo/demo.go:20.33,20.70 1 1
+github.com/gguimond/gopractice/demo/demo.go:24.33,26.10 1 1
+github.com/gguimond/gopractice/demo/demo.go:29.55,30.81 1 1
+github.com/gguimond/gopractice/demo/demo.go:34.9,48.19 13 1
+github.com/gguimond/gopractice/demo/demo.go:30.81,33.10 2 0
+github.com/gguimond/gopractice/demo/demo.go:52.27,57.2 4 0
+github.com/gguimond/gopractice/demo/demo.go:59.13,63.2 3 0
