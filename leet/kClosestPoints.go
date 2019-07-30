@@ -6,11 +6,11 @@ import (
 )
 
 func kClosest(points [][]int, K int) [][]int {
-    sort(&points, 0, len(points) - 1, K)
+    sort(points, 0, len(points) - 1, K)
     return points[0:K]
 }
 
-func sort(points *[][]int, i int, j int, K int) {
+func sort(points [][]int, i int, j int, K int) {
     if j <= i {
         return
     }
@@ -26,15 +26,15 @@ func sort(points *[][]int, i int, j int, K int) {
     }
 }
 
-func partition(points *[][]int, i int, j int) int {
+func partition(points [][]int, i int, j int) int {
     oi := i
-    pivotDist := dist((*points)[i])
+    pivotDist := dist((points)[i])
     i++
     for {
-        for dist((*points)[i]) < pivotDist && i < j{
+        for dist(points[i]) < pivotDist && i < j{
             i++
         }
-        for dist((*points)[j]) > pivotDist && i <= j{
+        for dist(points[j]) > pivotDist && i <= j{
             j++
         }
         if (i >= j) {
@@ -46,11 +46,11 @@ func partition(points *[][]int, i int, j int) int {
     return j
 }
 
-func swap(points *[][]int, i int, j int) {
+func swap(points [][]int, i int, j int) {
     var tmp []int
-    tmp = (*points)[i]
-    (*points)[i] = (*points)[j]
-    (*points)[j] = tmp
+    tmp = points[i]
+    points[i] = points[j]
+    points[j] = tmp
 }
 
 func dist(a []int) int {
